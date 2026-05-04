@@ -252,6 +252,19 @@ _BLANC     = (255, 255, 255)
 _NOIR      = (0,   0,   0)
 _TEXTE     = (38,  38,  38)
 
+def _safe(text: str) -> str:
+    """Replace non-Latin-1 chars so Helvetica (core PDF font) can encode them."""
+    for src, dst in (
+        ('—', '-'), ('–', '-'), ('−', '-'),
+        ('→', '->'), ('▶', '>'), ('≈', '~='),
+        ('≤', '<='), ('≥', '>='),
+        ('λ', 'lambda'), ('ρ', 'rho'), ('μ', 'mu'),
+        ('β', 'beta'),   ('α', 'alpha'), ('Δ', 'Delta'),
+        ('ⁿ', 'n'),      ('ᵇ', 'b'),
+    ):
+        text = text.replace(src, dst)
+    return text
+
 
 class _DocPDF(FPDF):
     def __init__(self):
@@ -264,7 +277,7 @@ class _DocPDF(FPDF):
         self.set_font("Helvetica", "B", 9)
         self.set_fill_color(*_BLEU)
         self.set_text_color(*_BLANC)
-        self.cell(0, 8, "Documentation Technique — Dimensionnement Échangeur à Plaques FP22",
+        self.cell(0, 8, "Documentation Technique - Dimensionnement Echangeur a Plaques FP22",
                   fill=True, ln=True, align="C")
         self.set_text_color(*_TEXTE)
         self.ln(2)
@@ -273,7 +286,7 @@ class _DocPDF(FPDF):
         self.set_y(-12)
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(130, 130, 130)
-        self.cell(0, 6, f"Page {self.page_no()}   —   FP22 Dimensionnement Tool", align="C")
+        self.cell(0, 6, f"Page {self.page_no()}   -   FP22 Dimensionnement Tool", align="C")
         self.set_text_color(*_TEXTE)
 
     # ── Blocs de mise en forme ──────────────────────────────────────
@@ -283,7 +296,7 @@ class _DocPDF(FPDF):
         self.set_fill_color(*_BLEU)
         self.set_text_color(*_BLANC)
         self.set_font("Helvetica", "B", 11)
-        label = f"  {numero}   {texte}" if numero else f"  {texte}"
+        label = f"  {numero}   {_safe(texte)}" if numero else f"  {_safe(texte)}"
         self.cell(0, 9, label, fill=True, ln=True)
         self.set_text_color(*_TEXTE)
         self.ln(2)
@@ -291,26 +304,28 @@ class _DocPDF(FPDF):
     def sous_titre(self, texte):
         self.set_font("Helvetica", "B", 10)
         self.set_text_color(*_BLEU)
-        self.cell(0, 7, texte, ln=True)
+        self.cell(0, 7, _safe(texte), ln=True)
         self.set_text_color(*_TEXTE)
 
     def corps(self, texte, indent=0):
         self.set_font("Helvetica", "", 9)
         self.set_x(self.get_x() + indent)
-        self.multi_cell(0, 5.5, texte)
+        self.multi_cell(0, 5.5, _safe(texte))
 
     def formule(self, texte, explication=""):
         self.set_fill_color(*_GRIS)
         self.set_font("Helvetica", "B", 10)
-        self.cell(0, 9, f"    {texte}", fill=True, ln=True)
+        self.cell(0, 9, f"    {_safe(texte)}", fill=True, ln=True)
         if explication:
             self.set_font("Helvetica", "I", 8.5)
             self.set_text_color(80, 80, 80)
-            self.cell(0, 5, f"    {explication}", ln=True)
+            self.cell(0, 5, f"    {_safe(explication)}", ln=True)
             self.set_text_color(*_TEXTE)
         self.ln(1)
 
     def tableau(self, entetes, lignes, largeurs):
+        entetes = [_safe(str(e)) for e in entetes]
+        lignes  = [[_safe(str(v)) for v in ligne] for ligne in lignes]
         # En-tête
         self.set_fill_color(*_BLEU)
         self.set_text_color(*_BLANC)
@@ -331,13 +346,13 @@ class _DocPDF(FPDF):
     def encadre(self, texte, couleur=_BLEU_CLAIR):
         self.set_fill_color(*couleur)
         self.set_font("Helvetica", "", 9)
-        self.multi_cell(0, 6, f"  {texte}  ", fill=True)
+        self.multi_cell(0, 6, f"  {_safe(texte)}  ", fill=True)
         self.ln(1)
 
     def fleche(self, texte):
         self.set_font("Helvetica", "", 9)
-        self.cell(6, 6, "▶", ln=False)
-        self.multi_cell(0, 6, texte)
+        self.cell(6, 6, ">", ln=False)
+        self.multi_cell(0, 6, _safe(texte))
 
 
 def generer_documentation_pdf() -> bytes:
