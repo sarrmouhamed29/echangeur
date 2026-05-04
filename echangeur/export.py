@@ -256,15 +256,12 @@ _TEXTE     = (38,  38,  38)
 class _DocPDF(FPDF):
     def __init__(self):
         super().__init__()
-        self.add_font("Arial",  style="",  fname="/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf")
-        self.add_font("Arial",  style="B", fname="/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf")
-        self.add_font("Arial",  style="I", fname="/usr/share/fonts/truetype/liberation/LiberationSans-Italic.ttf")
         self.set_auto_page_break(auto=True, margin=18)
 
     def header(self):
         if self.page_no() == 1:
             return
-        self.set_font("Arial", "B", 9)
+        self.set_font("Helvetica", "B", 9)
         self.set_fill_color(*_BLEU)
         self.set_text_color(*_BLANC)
         self.cell(0, 8, "Documentation Technique — Dimensionnement Échangeur à Plaques FP22",
@@ -274,7 +271,7 @@ class _DocPDF(FPDF):
 
     def footer(self):
         self.set_y(-12)
-        self.set_font("Arial", "I", 8)
+        self.set_font("Helvetica", "I", 8)
         self.set_text_color(130, 130, 130)
         self.cell(0, 6, f"Page {self.page_no()}   —   FP22 Dimensionnement Tool", align="C")
         self.set_text_color(*_TEXTE)
@@ -285,29 +282,29 @@ class _DocPDF(FPDF):
         self.ln(3)
         self.set_fill_color(*_BLEU)
         self.set_text_color(*_BLANC)
-        self.set_font("Arial", "B", 11)
+        self.set_font("Helvetica", "B", 11)
         label = f"  {numero}   {texte}" if numero else f"  {texte}"
         self.cell(0, 9, label, fill=True, ln=True)
         self.set_text_color(*_TEXTE)
         self.ln(2)
 
     def sous_titre(self, texte):
-        self.set_font("Arial", "B", 10)
+        self.set_font("Helvetica", "B", 10)
         self.set_text_color(*_BLEU)
         self.cell(0, 7, texte, ln=True)
         self.set_text_color(*_TEXTE)
 
     def corps(self, texte, indent=0):
-        self.set_font("Arial", "", 9)
+        self.set_font("Helvetica", "", 9)
         self.set_x(self.get_x() + indent)
         self.multi_cell(0, 5.5, texte)
 
     def formule(self, texte, explication=""):
         self.set_fill_color(*_GRIS)
-        self.set_font("Arial", "B", 10)
+        self.set_font("Helvetica", "B", 10)
         self.cell(0, 9, f"    {texte}", fill=True, ln=True)
         if explication:
-            self.set_font("Arial", "I", 8.5)
+            self.set_font("Helvetica", "I", 8.5)
             self.set_text_color(80, 80, 80)
             self.cell(0, 5, f"    {explication}", ln=True)
             self.set_text_color(*_TEXTE)
@@ -317,13 +314,13 @@ class _DocPDF(FPDF):
         # En-tête
         self.set_fill_color(*_BLEU)
         self.set_text_color(*_BLANC)
-        self.set_font("Arial", "B", 8.5)
+        self.set_font("Helvetica", "B", 8.5)
         for titre, w in zip(entetes, largeurs):
             self.cell(w, 7, f" {titre}", fill=True, border=1)
         self.ln()
         # Lignes alternées
         self.set_text_color(*_TEXTE)
-        self.set_font("Arial", "", 8.5)
+        self.set_font("Helvetica", "", 8.5)
         for i, ligne in enumerate(lignes):
             self.set_fill_color(*(_GRIS if i % 2 == 0 else _BLANC))
             for val, w in zip(ligne, largeurs):
@@ -333,12 +330,12 @@ class _DocPDF(FPDF):
 
     def encadre(self, texte, couleur=_BLEU_CLAIR):
         self.set_fill_color(*couleur)
-        self.set_font("Arial", "", 9)
+        self.set_font("Helvetica", "", 9)
         self.multi_cell(0, 6, f"  {texte}  ", fill=True)
         self.ln(1)
 
     def fleche(self, texte):
-        self.set_font("Arial", "", 9)
+        self.set_font("Helvetica", "", 9)
         self.cell(6, 6, "▶", ln=False)
         self.multi_cell(0, 6, texte)
 
@@ -354,24 +351,24 @@ def generer_documentation_pdf() -> bytes:
     pdf.rect(0, 0, 210, 297, "F")
 
     pdf.set_y(60)
-    pdf.set_font("Arial", "B", 26)
+    pdf.set_font("Helvetica", "B", 26)
     pdf.set_text_color(*_BLANC)
     pdf.cell(0, 14, "Dimensionnement", align="C", ln=True)
     pdf.cell(0, 14, "Échangeur à Plaques", align="C", ln=True)
-    pdf.set_font("Arial", "B", 32)
+    pdf.set_font("Helvetica", "B", 32)
     pdf.set_fill_color(*_BLANC)
     pdf.set_text_color(*_BLEU)
     pdf.ln(4)
     pdf.cell(0, 16, "FP22", align="C", fill=False, ln=True)
 
     pdf.ln(12)
-    pdf.set_font("Arial", "", 12)
+    pdf.set_font("Helvetica", "", 12)
     pdf.set_text_color(*_BLANC)
     pdf.cell(0, 8, "Documentation Technique", align="C", ln=True)
     pdf.cell(0, 8, "Méthodes de calcul & Corrélations", align="C", ln=True)
 
     pdf.set_y(230)
-    pdf.set_font("Arial", "I", 10)
+    pdf.set_font("Helvetica", "I", 10)
     pdf.set_text_color(180, 210, 240)
     pdf.cell(0, 7, f"Généré le {datetime.now().strftime('%d/%m/%Y')}", align="C", ln=True)
     pdf.cell(0, 7, "Outil développé en Python / Streamlit", align="C", ln=True)
@@ -409,12 +406,12 @@ def generer_documentation_pdf() -> bytes:
         ("Sinon",              "H_est <- H_calc  ->  retour a l'etape 1"),
     ]
     for i, (titre, desc) in enumerate(etapes, 1):
-        pdf.set_font("Arial", "B", 9)
+        pdf.set_font("Helvetica", "B", 9)
         pdf.set_fill_color(*_BLEU_CLAIR)
         pdf.cell(8, 6.5, f"  {i}", fill=True, border=1)
-        pdf.set_font("Arial", "B", 9)
+        pdf.set_font("Helvetica", "B", 9)
         pdf.cell(38, 6.5, f"  {titre}", fill=True, border=1)
-        pdf.set_font("Arial", "", 9)
+        pdf.set_font("Helvetica", "", 9)
         pdf.set_fill_color(*(_GRIS if i % 2 == 0 else _BLANC))
         pdf.cell(0, 6.5, f"  {desc}", fill=True, border=1, ln=True)
     pdf.ln(4)
