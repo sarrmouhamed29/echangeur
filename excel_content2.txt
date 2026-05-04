@@ -1,0 +1,12 @@
+﻿python : Traceback (most recent call last):
+Au caractère Ligne:1 : 64
++ ... :\Users\INSPIRON 16Plus\OneDrive\Documents\Doc PFE\code"; python -c "
++                                                               ~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "<string>", line 6, in <module>
+  File "C:\Users\INSPIRON 16Plus\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\l
+ocal-packages\Python312\site-packages\openpyxl\workbook\workbook.py", line 287, in __getitem__
+    raise KeyError("Worksheet {0} does not exist.".format(key))
+KeyError: 'Worksheet Iteration H Global does not exist.'

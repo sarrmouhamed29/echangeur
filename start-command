@@ -1,0 +1,2 @@
+cd "c:\Users\INSPIRON 16Plus\OneDrive\Documents\Doc PFE\code"
+.\venv\Scripts\streamlit run app.py
