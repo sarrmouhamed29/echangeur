@@ -256,9 +256,9 @@ _TEXTE     = (38,  38,  38)
 class _DocPDF(FPDF):
     def __init__(self):
         super().__init__()
-        self.add_font("Arial",  style="",  fname="C:/Windows/Fonts/arial.ttf")
-        self.add_font("Arial",  style="B", fname="C:/Windows/Fonts/arialbd.ttf")
-        self.add_font("Arial",  style="I", fname="C:/Windows/Fonts/ariali.ttf")
+        self.add_font("Arial",  style="",  fname="/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf")
+        self.add_font("Arial",  style="B", fname="/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf")
+        self.add_font("Arial",  style="I", fname="/usr/share/fonts/truetype/liberation/LiberationSans-Italic.ttf")
         self.set_auto_page_break(auto=True, margin=18)
 
     def header(self):
